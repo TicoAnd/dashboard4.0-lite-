@@ -273,7 +273,30 @@
                 updateDaylightArc(sunrise, sunset);
 
                 // Forecast
-                const days = ['Today', 'Fri', 'Sat']; // Simple mapping
+                // --- Replace the old forecast section with this ---
+
+// 1. Generate dynamic day labels from the API data
+const days = data.daily.time.map((dateStr, index) => {
+    if (index === 0) return 'Today';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { weekday: 'short' });
+});
+
+// 2. Build the HTML using the dynamic 'days' array
+let forecastHTML = '';
+for(let i=0; i<3; i++) {
+    forecastHTML += `
+        <div class="forecast-day">
+            <div class="day-label">${days[i]}</div>
+            <div class="forecast-icon">${getWeatherIcon(data.daily.weather_code[i], true)}</div>
+            <div class="rain-data">
+                💧 ${data.daily.precipitation_probability_max[i]}%<br>
+                ${data.daily.precipitation_sum[i]}mm
+            </div>
+        </div>
+    `;
+}
+document.getElementById('forecast-container').innerHTML = forecastHTML;
                 let forecastHTML = '';
                 for(let i=0; i<3; i++) {
                     forecastHTML += `

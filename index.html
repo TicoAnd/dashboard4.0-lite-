@@ -3,363 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep Focus Dashboard - Bologna</title>
+    <title>Dashboard</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
         :root {
-            --bg-color: #050505;
-            --text-main: #e0e0e0;
-            --text-dim: #888;
-            --accent: #fff;
+            --main-color: #FAF3E0;
+            --bg-color: #000000;
         }
 
-        body, html {
+        body {
             margin: 0;
             padding: 0;
             background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--main-color);
+            font-family: 'Bebas Neue', sans-serif;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            user-select: none;
         }
 
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            width: 100%;
-            height: 100%;
-            padding: 40px;
-            box-sizing: border-box;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        /* --- Globe Background --- */
-        .globe-wrapper {
+        .top-text {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        iframe {
-            width: 120%;
-            height: 120%;
-            border: none;
-            filter: grayscale(0.6) brightness(0.6) contrast(1.2) saturate(0.8);
-            pointer-events: auto;
-        }
-
-        /* --- Left Panel --- */
-        .panel-left {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .greeting h2 { font-weight: 300; margin: 0; font-size: 1.2rem; }
-        .greeting h1 { font-weight: 500; margin: 5px 0; font-size: 2rem; }
-
-        .weather-main { margin-top: 40px; }
-        .temp-row { display: flex; align-items: center; gap: 20px; }
-        .current-temp { font-size: 8rem; font-weight: 200; line-height: 1; }
-        .weather-icon-large { width: 60px; height: 60px; fill: var(--accent); }
-        .feels-like { color: var(--text-dim); font-size: 1.2rem; margin-top: 10px; }
-
-        .forecast { margin-top: 40px; display: flex; gap: 20px; }
-        .forecast-day { text-align: left; flex: 1; }
-        .day-label { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 10px; }
-        .forecast-icon { width: 24px; height: 24px; margin: 10px 0; }
-        .rain-data { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
-
-        /* --- Right Panel --- */
-        .panel-right {
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-            justify-content: space-between;
-        }
-
-        .clock-section h1 { font-size: 4rem; font-weight: 200; margin: 0; }
-        .clock-section p { color: var(--text-dim); margin: 5px 0; }
-
-        .progress-section { margin-top: 40px; }
-        .progress-item { margin-bottom: 25px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 8px; color: var(--text-dim); }
-        .progress-bar-bg { width: 100%; height: 2px; background: #333; position: relative; }
-        .progress-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.5s ease; }
-
-        .daylight-section { margin-top: 40px; }
-        .daylight-header { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 5px; }
-        .daylight-remaining { font-size: 1.2rem; margin-bottom: 20px; }
-
-        /* Arc Chart */
-        .arc-container {
+            top: 4vh;
             width: 100%;
-            height: 80px;
-            position: relative;
-            margin-bottom: 20px;
+            text-align: center;
+            font-size: 3.5vw;
+            letter-spacing: 2px;
         }
-        .arc-svg { width: 100%; height: 100%; }
-        .sun-dot { fill: var(--accent); }
 
-        .sun-times { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim); border-top: 1px solid #333; padding-top: 10px; }
+        .center-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(2vh);
+        }
 
-        .location-footer { font-size: 0.8rem; color: var(--text-dim); display: flex; gap: 15px; }
+        .time {
+            font-size: 26vw;
+            line-height: 0.75;
+            letter-spacing: 2px;
+        }
 
-        hr { border: none; border-top: 1px solid #333; margin: 20px 0; }
+        .date {
+            font-size: 11vw;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        .weather-block {
+            position: absolute;
+            bottom: 4vh;
+            left: 2vw;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5vh;
+        }
+
+        .current-weather {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .current-temp {
+            font-size: 6vw;
+            line-height: 0.8;
+        }
+
+        .current-icon svg {
+            width: 4.5vw;
+            height: 4.5vw;
+        }
+
+        .feels-like {
+            font-size: 1.5vw;
+            letter-spacing: 1px;
+            margin-bottom: 2vh;
+        }
+
+        .forecast-container {
+            display: flex;
+            gap: 2vw;
+        }
+
+        .forecast-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8vh;
+            font-size: 1.3vw;
+        }
+
+        .forecast-icon svg {
+            width: 2.5vw;
+            height: 2.5vw;
+        }
+
+        .precip-prob {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 1vw;
+        }
+
+        .precip-prob svg {
+            width: 0.8vw;
+            height: 0.8vw;
+            fill: var(--main-color);
+        }
+
+        .precip-sum {
+            font-size: 1vw;
+        }
+        
+        svg {
+            stroke: var(--main-color);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
     </style>
 </head>
 <body>
 
-    <div class="globe-wrapper">
-        <iframe src="https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,316"></iframe>
+    <div class="top-text">LOCK IN</div>
+
+    <div class="center-block">
+        <div class="time" id="time">--:--</div>
+        <div class="date" id="date">--/--</div>
     </div>
 
-    <div class="dashboard-container">
-        <div class="panel-left">
-            <div class="top-meta">
-                <div class="greeting">
-                    <h2 id="time-greeting">Good morning,</h2>
-                    <h1>Andrea</h1>
-                </div>
-                <hr style="width: 30px; margin-left: 0;">
-                <div class="weather-main">
-                    <div class="temp-row">
-                        <div class="current-temp" id="temp-val">--°</div>
-                        <div id="main-weather-icon"></div>
-                    </div>
-                    <div class="feels-like" id="feels-like-val">Feels like --°</div>
-                </div>
-                
-                <div class="forecast" id="forecast-container">
-                    </div>
-            </div>
-
-            <div class="location-footer">
-                <span>● Bologna, Italy</span>
-                <span>|</span>
-                <span id="update-time">Updated --:--</span>
-            </div>
+    <div class="weather-block">
+        <div class="current-weather">
+            <div class="current-temp" id="current-temp">--°</div>
+            <div class="current-icon" id="current-icon"></div>
         </div>
-
-        <div></div>
-
-        <div class="panel-right">
-            <div class="clock-section">
-                <h1 id="clock-time">00:00</h1>
-                <p id="clock-date">Month 00, 0000</p>
-                <hr style="width: 100%; margin-right: 0;">
+        <div class="feels-like" id="feels-like">FEELS LIKE --</div>
+        
+        <div class="forecast-container" id="forecast">
             </div>
-
-            <div class="progress-section">
-                <div class="progress-item">
-                    <div class="progress-label"><span>Life progress</span><span id="life-perc">00.000%</span></div>
-                    <div class="progress-bar-bg"><div id="life-bar" class="progress-bar-fill"></div></div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-label"><span>Year progress</span><span id="year-perc">00.000%</span></div>
-                    <div class="progress-bar-bg"><div id="year-bar" class="progress-bar-fill"></div></div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-label"><span>Day progress</span><span id="day-perc">00.000%</span></div>
-                    <div class="progress-bar-bg"><div id="day-bar" class="progress-bar-fill"></div></div>
-                </div>
-            </div>
-
-            <div class="daylight-section">
-                <div class="daylight-header">Daylight remaining</div>
-                <div class="daylight-remaining" id="remaining-val">--h --m</div>
-                
-                <div class="arc-container">
-                    <svg class="arc-svg" viewBox="0 0 200 80">
-                        <path d="M 10 70 Q 100 -20 190 70" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="2,2" />
-                        <circle id="sun-position" class="sun-dot" r="3" cx="10" cy="70" />
-                        <line x1="0" y1="70" x2="200" y2="70" stroke="#333" stroke-width="1" stroke-dasharray="2,2"/>
-                    </svg>
-                    <div class="sun-times">
-                        <div>
-                            <span style="display:block; font-size:0.6rem">Sunrise</span>
-                            <b id="sunrise-val">00:00</b>
-                        </div>
-                        <div>
-                            <span style="display:block; font-size:0.6rem">Sunset</span>
-                            <b id="sunset-val">00:00</b>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
-        const CONFIG = {
-            birth: new Date('2007-01-26T00:00:00'),
-            death: new Date('2085-01-26T00:00:00'),
-            lat: 44.4938,
-            lon: 11.3387
-        };
+        const sunIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+        const cloudIcon = `<svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>`;
+        const rainIcon = `<svg viewBox="0 0 24 24"><path d="M16 13v8"></path><path d="M8 13v8"></path><path d="M12 15v8"></path><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg>`;
+        const dropIcon = `<svg viewBox="0 0 24 24" stroke="none"><path d="M12 21.5c-3.03 0-5.5-2.47-5.5-5.5 0-2.36 1.54-5.06 4.35-8.4l1.15-1.37 1.15 1.37c2.81 3.34 4.35 6.04 4.35 8.4 0 3.03-2.47 5.5-5.5 5.5z"/></svg>`;
 
-        function updateClocks() {
-            const now = new Date();
-            
-            // Time in Italy
-            const options = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Rome' };
-            document.getElementById('clock-time').innerText = new Intl.DateTimeFormat('en-GB', options).format(now);
-            
-            const dateOptions = { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'Europe/Rome' };
-            document.getElementById('clock-date').innerText = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
-
-            // Greeting
-            const hour = now.getHours();
-            let greet = "Good night,";
-            if(hour >= 5 && hour < 12) greet = "Good morning,";
-            else if(hour >= 12 && hour < 18) greet = "Good afternoon,";
-            else if(hour >= 18 && hour < 22) greet = "Good evening,";
-            document.getElementById('time-greeting').innerText = greet;
-
-            // Percentages (xx.xxx)
-            // Life
-            const lifeTotal = CONFIG.death - CONFIG.birth;
-            const lifePassed = now - CONFIG.birth;
-            const lifeP = Math.min(100, Math.max(0, (lifePassed / lifeTotal) * 100));
-            document.getElementById('life-perc').innerText = lifeP.toFixed(3) + '%';
-            document.getElementById('life-bar').style.width = lifeP + '%';
-
-            // Year
-            const startOfYear = new Date(now.getFullYear(), 0, 1);
-            const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
-            const yearP = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
-            document.getElementById('year-perc').innerText = yearP.toFixed(3) + '%';
-            document.getElementById('year-bar').style.width = yearP + '%';
-
-            // Day
-            const startOfDay = new Date(now.setHours(0,0,0,0));
-            const currentNow = new Date();
-            const dayP = ((currentNow - startOfDay) / 86400000) * 100;
-            document.getElementById('day-perc').innerText = dayP.toFixed(3) + '%';
-            document.getElementById('day-bar').style.width = dayP + '%';
+        function getWeatherIcon(code) {
+            if (code <= 2) return sunIcon;
+            if (code <= 48) return cloudIcon;
+            return rainIcon;
         }
 
-        async function fetchWeather() {
+        function updateClock() {
+            const now = new Date();
+            
+            const timeString = new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Europe/Rome',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }).format(now);
+            
+            const dateParts = new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Europe/Rome',
+                day: 'numeric',
+                month: 'numeric'
+            }).formatToParts(now);
+            
+            const day = dateParts.find(p => p.type === 'day').value;
+            const month = dateParts.find(p => p.type === 'month').value;
+
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = `${day}/${month}`;
+        }
+
+        async function updateWeather() {
             try {
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${CONFIG.lat}&longitude=${CONFIG.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code&daily=weather_code,sunrise,sunset,precipitation_probability_max,precipitation_sum&timezone=Europe%2FBerlin&forecast_days=3`;
+                // Bologna Coordinates
+                const lat = 44.4949;
+                const lon = 11.3426;
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code&daily=weather_code,precipitation_probability_max,precipitation_sum&timezone=Europe%2FRome`;
+                
                 const response = await fetch(url);
                 const data = await response.json();
 
-                // Current
-                document.getElementById('temp-val').innerText = Math.round(data.current.temperature_2m) + '°';
-                document.getElementById('feels-like-val').innerText = `Feels like ${Math.round(data.current.apparent_temperature)}°`;
-                document.getElementById('main-weather-icon').innerHTML = getWeatherIcon(data.current.weather_code);
+                // Current Weather
+                document.getElementById('current-temp').textContent = Math.round(data.current.temperature_2m) + '°';
+                document.getElementById('feels-like').textContent = 'FEELS LIKE ' + Math.round(data.current.apparent_temperature);
+                document.getElementById('current-icon').innerHTML = getWeatherIcon(data.current.weather_code);
+
+                // 5-Day Forecast
+                const forecastEl = document.getElementById('forecast');
+                forecastEl.innerHTML = '';
                 
-                const now = new Date();
-                document.getElementById('update-time').innerText = `Updated ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-                // Daylight section
-                const sunrise = new Date(data.daily.sunrise[0]);
-                const sunset = new Date(data.daily.sunset[0]);
-                document.getElementById('sunrise-val').innerText = sunrise.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
-                document.getElementById('sunset-val').innerText = sunset.toLocaleTimeString('it-IT', {hour: '2-digit', minute:'2-digit'});
+                for (let i = 0; i < 5; i++) {
+                    const date = new Date(data.daily.time[i]);
+                    const dayLabel = i === 0 ? 'TODAY' : daysOfWeek[date.getDay()];
+                    const prob = data.daily.precipitation_probability_max[i];
+                    const sum = data.daily.precipitation_sum[i];
+                    const icon = getWeatherIcon(data.daily.weather_code[i]);
 
-                updateDaylightArc(sunrise, sunset);
-
-                // Forecast
-                // --- Replace the old forecast section with this ---
-
-// 1. Generate dynamic day labels from the API data
-const days = data.daily.time.map((dateStr, index) => {
-    if (index === 0) return 'Today';
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { weekday: 'short' });
-});
-
-// 2. Build the HTML using the dynamic 'days' array
-let forecastHTML = '';
-for(let i=0; i<3; i++) {
-    forecastHTML += `
-        <div class="forecast-day">
-            <div class="day-label">${days[i]}</div>
-            <div class="forecast-icon">${getWeatherIcon(data.daily.weather_code[i], true)}</div>
-            <div class="rain-data">
-                💧 ${data.daily.precipitation_probability_max[i]}%<br>
-                ${data.daily.precipitation_sum[i]}mm
-            </div>
-        </div>
-    `;
-}
-document.getElementById('forecast-container').innerHTML = forecastHTML;
-                let forecastHTML = '';
-                for(let i=0; i<3; i++) {
-                    forecastHTML += `
+                    forecastEl.innerHTML += `
                         <div class="forecast-day">
-                            <div class="day-label">${days[i]}</div>
-                            <div class="forecast-icon">${getWeatherIcon(data.daily.weather_code[i], true)}</div>
-                            <div class="rain-data">
-                                💧 ${data.daily.precipitation_probability_max[i]}%<br>
-                                ${data.daily.precipitation_sum[i]}mm
-                            </div>
+                            <div>${dayLabel}</div>
+                            <div class="forecast-icon">${icon}</div>
+                            <div class="precip-prob">${dropIcon}${prob}%</div>
+                            <div class="precip-sum">${sum}MM</div>
                         </div>
                     `;
                 }
-                document.getElementById('forecast-container').innerHTML = forecastHTML;
-
-            } catch (e) { console.error("Weather load failed", e); }
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+            }
         }
 
-        function updateDaylightArc(sunrise, sunset) {
-            const now = new Date();
-            const totalDaylight = sunset - sunrise;
-            const passedDaylight = now - sunrise;
-            
-            let remainingMs = sunset - now;
-            if (remainingMs < 0) remainingMs = 0;
-            const h = Math.floor(remainingMs / 3600000);
-            const m = Math.floor((remainingMs % 3600000) / 60000);
-            document.getElementById('remaining-val').innerText = `${h}h ${m}m`;
-
-            // Sun position on arc
-            let percent = passedDaylight / totalDaylight;
-            if (percent < 0) percent = 0;
-            if (percent > 1) percent = 1;
-
-            // SVG Path logic (Quadratic Bezier: M 10 70 Q 100 -20 190 70)
-            const x = 10 + (percent * 180);
-            // Parabolic curve approximation for height
-            const y = 70 - (Math.sin(percent * Math.PI) * 75); 
-            
-            const sun = document.getElementById('sun-position');
-            sun.setAttribute('cx', x);
-            sun.setAttribute('cy', y);
-            sun.style.opacity = (now > sunrise && now < sunset) ? 1 : 0.3;
-        }
-
-        function getWeatherIcon(code, small = false) {
-            // Simplified WMO Code to SVG mapping
-            let icon = '☀️'; 
-            if (code >= 1 && code <= 3) icon = '⛅';
-            if (code >= 45 && code <= 48) icon = '🌫️';
-            if (code >= 51 && code <= 67) icon = '🌧️';
-            if (code >= 71 && code <= 77) icon = '❄️';
-            if (code >= 80) icon = '⛈️';
-            
-            const size = small ? '24px' : '60px';
-            return `<span style="font-size: ${size}">${icon}</span>`;
-        }
-
-        // Init
-        setInterval(updateClocks, 50); // High freq for the .xxx decimals
-        setInterval(fetchWeather, 20 * 60 * 1000); // 20 mins
-        updateClocks();
-        fetchWeather();
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        updateWeather();
+        setInterval(updateWeather, 1800000); // Update weather every 30 minutes
     </script>
 </body>
 </html>

@@ -53,13 +53,32 @@
     body {
       min-height: var(--app-height);
       background:
-        radial-gradient(circle at 48% 20%, rgba(255, 237, 169, 0.06), transparent 28%),
-        radial-gradient(circle at 34% 42%, rgba(182, 112, 71, 0.04), transparent 20%),
         radial-gradient(circle at 22% 18%, rgba(255, 236, 176, 0.08), transparent 20%),
         radial-gradient(circle at 50% 42%, rgba(113, 134, 87, 0.06), transparent 28%),
         radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.34), transparent 42%),
-        radial-gradient(circle at center, transparent 38%, rgba(0, 0, 0, 0.35) 76%, rgba(0, 0, 0, 0.85) 100%),
         linear-gradient(180deg, #030405 0%, #050607 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 48% 20%, rgba(255, 237, 169, 0.06), transparent 28%),
+        radial-gradient(circle at 34% 42%, rgba(182, 112, 71, 0.04), transparent 20%);
+      mix-blend-mode: screen;
+      opacity: 0.42;
+    }
+
+    body::after {
+      background:
+        radial-gradient(circle at center, transparent 38%, rgba(0, 0, 0, 0.35) 76%, rgba(0, 0, 0, 0.85) 100%);
     }
 
     body[data-weather-state="clear"] {
@@ -565,24 +584,16 @@
 
     .globe-frame iframe {
       position: absolute;
-      inset: -4%;
-      width: 108%;
-      height: 108%;
+      inset: -12.5%;
+      width: 125%;
+      height: 125%;
       border: 0;
       z-index: 0;
       opacity: 0.01;
       pointer-events: none;
       filter: saturate(0.92) contrast(1.02) brightness(0.86) sepia(0.015);
-      transform: none;
+      transform: scale(1.038);
       transition: opacity 900ms ease;
-    }
-
-    @media (orientation: landscape) and (hover: none) and (pointer: coarse), (orientation: landscape) and (any-hover: none) and (any-pointer: coarse) {
-      .globe-frame iframe {
-        inset: 5%;
-        width: 90%;
-        height: 90%;
-      }
     }
 
     .globe-frame iframe.is-ready {
@@ -1224,7 +1235,7 @@
             <div>
               <h2>Live globe unavailable</h2>
               <p>The embedded earth view did not load here. You can still open the exact live globe directly.</p>
-              <a href="https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,430" target="_blank" rel="noreferrer noopener">Open live globe</a>
+              <a href="https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,376" target="_blank" rel="noreferrer noopener">Open live globe</a>
             </div>
           </div>
         </div>
@@ -1334,8 +1345,8 @@
       weatherFallbackRetryMs: 5 * 60 * 1000,
       clockIntervalMs: 1000,
       slowUiIntervalMs: 60 * 1000,
-      globeUrl: "https://earth.nullschool.net/?float#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,430",
-      globeExternalUrl: "https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,430"
+      globeUrl: "https://earth.nullschool.net/?float#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,376",
+      globeExternalUrl: "https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,376"
     };
 
     const state = {

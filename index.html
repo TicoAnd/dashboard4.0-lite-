@@ -2,14 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jura:wght@300;400;500;600&display=swap');
 
         :root {
-            --main-color: #FAF3E0;
+            --main-color: #faf3e0;
             --bg-color: #000000;
+            --display-font: 'Jura', sans-serif;
+            --label-font: 'Bebas Neue', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* --- BACKGROUND (wind map iframe) --- */
+        #wind-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 120vw;
+            height: 120vh;
+            border: none;
+            z-index: -2;
+            pointer-events: none;
+            filter: brightness(1.02) contrast(1.08);
+            transform: translate(-50%, -50%) scale(1.08);
+            transform-origin: center;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.03) 38%, rgba(0, 0, 0, 0.12));
+            z-index: -1;
         }
 
         body {
@@ -17,7 +47,7 @@
             padding: 0;
             background-color: var(--bg-color);
             color: var(--main-color);
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: var(--label-font);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -31,95 +61,118 @@
             top: 4vh;
             width: 100%;
             text-align: center;
-            font-size: 3.5vw;
-            letter-spacing: 2px;
+            font-size: clamp(1.5rem, 3vw, 3.4rem);
+            letter-spacing: 0.22em;
         }
 
         .center-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            transform: translateY(2vh);
+            transform: translateY(1vh);
+        }
+
+        .time,
+        .date,
+        .current-temp,
+        .feels-like,
+        .forecast-day,
+        .precip-prob,
+        .precip-sum {
+            font-family: var(--display-font);
         }
 
         .time {
-            font-size: 26vw;
-            line-height: 0.75;
-            letter-spacing: 2px;
+            font-size: min(20vw, 15rem);
+            line-height: 0.82;
+            letter-spacing: 0.05em;
+            font-weight: 500;
         }
 
         .date {
-            font-size: 11vw;
+            margin-top: 1.2vh;
+            font-size: min(6.2vw, 4.8rem);
             line-height: 1;
-            letter-spacing: 2px;
+            letter-spacing: 0.18em;
+            font-weight: 300;
         }
 
         .weather-block {
             position: absolute;
-            bottom: 4vh;
+            top: 4vh;
             left: 2vw;
             display: flex;
             flex-direction: column;
-            gap: 1.5vh;
+            gap: 1.2vh;
+            align-items: flex-start;
+            max-width: min(32vw, 28rem);
         }
 
         .current-weather {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 0.8rem;
         }
 
         .current-temp {
-            font-size: 6vw;
-            line-height: 0.8;
+            font-size: min(4.8vw, 4rem);
+            line-height: 0.88;
+            letter-spacing: 0.04em;
+            font-weight: 500;
         }
 
         .current-icon svg {
-            width: 4.5vw;
-            height: 4.5vw;
+            width: min(3.6vw, 2.8rem);
+            height: min(3.6vw, 2.8rem);
         }
 
         .feels-like {
-            font-size: 1.5vw;
-            letter-spacing: 1px;
-            margin-bottom: 2vh;
+            font-size: min(1.2vw, 1rem);
+            letter-spacing: 0.18em;
+            margin-bottom: 1vh;
+            opacity: 0.9;
+            text-transform: uppercase;
         }
 
         .forecast-container {
             display: flex;
-            gap: 2vw;
+            gap: 1.4vw;
         }
 
         .forecast-day {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.8vh;
-            font-size: 1.3vw;
+            gap: 0.55vh;
+            font-size: min(0.98vw, 0.92rem);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
         }
 
         .forecast-icon svg {
-            width: 2.5vw;
-            height: 2.5vw;
+            width: min(2.1vw, 1.4rem);
+            height: min(2.1vw, 1.4rem);
         }
 
         .precip-prob {
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 1vw;
+            gap: 0.25rem;
+            font-size: min(0.82vw, 0.8rem);
+            letter-spacing: 0.08em;
         }
 
         .precip-prob svg {
-            width: 0.8vw;
-            height: 0.8vw;
+            width: min(0.72vw, 0.7rem);
+            height: min(0.72vw, 0.7rem);
             fill: var(--main-color);
         }
 
         .precip-sum {
-            font-size: 1vw;
+            font-size: min(0.82vw, 0.8rem);
+            letter-spacing: 0.08em;
         }
-        
+
         svg {
             stroke: var(--main-color);
             fill: none;
@@ -127,9 +180,78 @@
             stroke-linecap: round;
             stroke-linejoin: round;
         }
+
+        @media (max-width: 900px) {
+            .top-text {
+                top: 2.5vh;
+                letter-spacing: 0.16em;
+            }
+
+            .center-block {
+                transform: translateY(5vh);
+            }
+
+            .time {
+                font-size: 30vw;
+            }
+
+            .date {
+                font-size: 9vw;
+            }
+
+            .weather-block {
+                top: 2.5vh;
+                left: 4vw;
+                max-width: 90vw;
+                gap: 1vh;
+            }
+
+            .current-temp {
+                font-size: 10vw;
+            }
+
+            .current-icon svg {
+                width: 8vw;
+                height: 8vw;
+            }
+
+            .feels-like {
+                font-size: 3vw;
+                margin-bottom: 0.8vh;
+            }
+
+            .forecast-container {
+                gap: 3vw;
+            }
+
+            .forecast-day {
+                font-size: 2.7vw;
+            }
+
+            .forecast-icon svg {
+                width: 5vw;
+                height: 5vw;
+            }
+
+            .precip-prob,
+            .precip-sum {
+                font-size: 2.2vw;
+            }
+
+            .precip-prob svg {
+                width: 2vw;
+                height: 2vw;
+            }
+        }
     </style>
 </head>
+
 <body>
+
+    <iframe
+        id="wind-bg"
+        src="https://earth.nullschool.net/#current/wind/isobaric/250hPa/overlay=uv_index/orthographic=-349.96,33.76,316/loc=12.104,43.812">
+    </iframe>
 
     <div class="top-text">LOCK IN</div>
 
@@ -144,93 +266,90 @@
             <div class="current-icon" id="current-icon"></div>
         </div>
         <div class="feels-like" id="feels-like">FEELS LIKE --</div>
-        
-        <div class="forecast-container" id="forecast">
-            </div>
+
+        <div class="forecast-container" id="forecast"></div>
     </div>
 
-    <script>
-        const sunIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
-        const cloudIcon = `<svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>`;
-        const rainIcon = `<svg viewBox="0 0 24 24"><path d="M16 13v8"></path><path d="M8 13v8"></path><path d="M12 15v8"></path><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg>`;
-        const dropIcon = `<svg viewBox="0 0 24 24" stroke="none"><path d="M12 21.5c-3.03 0-5.5-2.47-5.5-5.5 0-2.36 1.54-5.06 4.35-8.4l1.15-1.37 1.15 1.37c2.81 3.34 4.35 6.04 4.35 8.4 0 3.03-2.47 5.5-5.5 5.5z"/></svg>`;
+<script>
+const sunIcon = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+const cloudIcon = `<svg viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>`;
+const rainIcon = `<svg viewBox="0 0 24 24"><path d="M16 13v8"></path><path d="M8 13v8"></path><path d="M12 15v8"></path><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg>`;
+const dropIcon = `<svg viewBox="0 0 24 24" stroke="none"><path d="M12 21.5c-3.03 0-5.5-2.47-5.5-5.5 0-2.36 1.54-5.06 4.35-8.4l1.15-1.37 1.15 1.37c2.81 3.34 4.35 6.04 4.35 8.4 0 3.03-2.47 5.5-5.5 5.5z"/></svg>`;
 
-        function getWeatherIcon(code) {
-            if (code <= 2) return sunIcon;
-            if (code <= 48) return cloudIcon;
-            return rainIcon;
+function getWeatherIcon(code) {
+    if (code <= 2) return sunIcon;
+    if (code <= 48) return cloudIcon;
+    return rainIcon;
+}
+
+function updateClock() {
+    const now = new Date();
+
+    const timeString = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Rome',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    }).format(now);
+
+    const dateParts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Rome',
+        day: 'numeric',
+        month: 'numeric'
+    }).formatToParts(now);
+
+    const day = dateParts.find(p => p.type === 'day').value;
+    const month = dateParts.find(p => p.type === 'month').value;
+
+    document.getElementById('time').textContent = timeString;
+    document.getElementById('date').textContent = `${day}/${month}`;
+}
+
+async function updateWeather() {
+    try {
+        const lat = 44.4949;
+        const lon = 11.3426;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code&daily=weather_code,precipitation_probability_max,precipitation_sum&timezone=Europe%2FRome`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        document.getElementById('current-temp').textContent = Math.round(data.current.temperature_2m) + '°';
+        document.getElementById('feels-like').textContent = 'FEELS LIKE ' + Math.round(data.current.apparent_temperature);
+        document.getElementById('current-icon').innerHTML = getWeatherIcon(data.current.weather_code);
+
+        const forecastEl = document.getElementById('forecast');
+        forecastEl.innerHTML = '';
+
+        const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+        for (let i = 0; i < 5; i++) {
+            const date = new Date(data.daily.time[i]);
+            const dayLabel = i === 0 ? 'TODAY' : daysOfWeek[date.getDay()];
+            const prob = data.daily.precipitation_probability_max[i];
+            const sum = data.daily.precipitation_sum[i];
+            const icon = getWeatherIcon(data.daily.weather_code[i]);
+
+            forecastEl.innerHTML += `
+                <div class="forecast-day">
+                    <div>${dayLabel}</div>
+                    <div class="forecast-icon">${icon}</div>
+                    <div class="precip-prob">${dropIcon}${prob}%</div>
+                    <div class="precip-sum">${sum}MM</div>
+                </div>
+            `;
         }
+    } catch (error) {
+        console.error('Weather error:', error);
+    }
+}
 
-        function updateClock() {
-            const now = new Date();
-            
-            const timeString = new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Rome',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            }).format(now);
-            
-            const dateParts = new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Rome',
-                day: 'numeric',
-                month: 'numeric'
-            }).formatToParts(now);
-            
-            const day = dateParts.find(p => p.type === 'day').value;
-            const month = dateParts.find(p => p.type === 'month').value;
+setInterval(updateClock, 1000);
+updateClock();
 
-            document.getElementById('time').textContent = timeString;
-            document.getElementById('date').textContent = `${day}/${month}`;
-        }
+updateWeather();
+setInterval(updateWeather, 1800000);
+</script>
 
-        async function updateWeather() {
-            try {
-                // Bologna Coordinates
-                const lat = 44.4949;
-                const lon = 11.3426;
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code&daily=weather_code,precipitation_probability_max,precipitation_sum&timezone=Europe%2FRome`;
-                
-                const response = await fetch(url);
-                const data = await response.json();
-
-                // Current Weather
-                document.getElementById('current-temp').textContent = Math.round(data.current.temperature_2m) + '°';
-                document.getElementById('feels-like').textContent = 'FEELS LIKE ' + Math.round(data.current.apparent_temperature);
-                document.getElementById('current-icon').innerHTML = getWeatherIcon(data.current.weather_code);
-
-                // 5-Day Forecast
-                const forecastEl = document.getElementById('forecast');
-                forecastEl.innerHTML = '';
-                
-                const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
-                for (let i = 0; i < 5; i++) {
-                    const date = new Date(data.daily.time[i]);
-                    const dayLabel = i === 0 ? 'TODAY' : daysOfWeek[date.getDay()];
-                    const prob = data.daily.precipitation_probability_max[i];
-                    const sum = data.daily.precipitation_sum[i];
-                    const icon = getWeatherIcon(data.daily.weather_code[i]);
-
-                    forecastEl.innerHTML += `
-                        <div class="forecast-day">
-                            <div>${dayLabel}</div>
-                            <div class="forecast-icon">${icon}</div>
-                            <div class="precip-prob">${dropIcon}${prob}%</div>
-                            <div class="precip-sum">${sum}MM</div>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error("Error fetching weather data:", error);
-            }
-        }
-
-        setInterval(updateClock, 1000);
-        updateClock();
-        
-        updateWeather();
-        setInterval(updateWeather, 1800000); // Update weather every 30 minutes
-    </script>
 </body>
 </html>

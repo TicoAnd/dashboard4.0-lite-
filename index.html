@@ -22,6 +22,18 @@
       --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
       --panel-blur: none;
       --ui-font: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      --app-height: 100vh;
+      --layout-scale: 1;
+      --shell-vpad: clamp(18px, 3.1vh, 42px);
+      --shell-hpad: clamp(18px, 2.4vw, 42px);
+      --shell-gap: clamp(16px, 1.8vw, 30px);
+      --content-height: calc(var(--app-height) - (var(--shell-vpad) * 2));
+    }
+
+    @supports (height: 100dvh) {
+      :root {
+        --app-height: 100dvh;
+      }
     }
 
     * {
@@ -39,7 +51,7 @@
     }
 
     body {
-      min-height: 100vh;
+      min-height: var(--app-height);
       background:
         radial-gradient(circle at 22% 18%, rgba(255, 236, 176, 0.08), transparent 20%),
         radial-gradient(circle at 50% 42%, rgba(113, 134, 87, 0.06), transparent 28%),
@@ -102,23 +114,31 @@
     .app-shell {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      min-height: var(--app-height);
+      height: var(--app-height);
       display: grid;
-      grid-template-columns: minmax(250px, 320px) minmax(420px, 1fr) minmax(250px, 320px);
-      gap: clamp(18px, 2vw, 34px);
-      padding: clamp(28px, 4vw, 48px) clamp(22px, 3vw, 42px);
+      grid-template-columns: minmax(218px, 18.4vw) minmax(460px, 1.48fr) minmax(218px, 18.4vw);
+      gap: var(--shell-gap);
+      padding: var(--shell-vpad) var(--shell-hpad);
       align-items: stretch;
     }
 
     .panel,
     .center-stage {
-      min-height: calc(100vh - clamp(56px, 8vw, 96px));
+      min-height: 0;
+      height: var(--content-height);
     }
 
     .panel {
+      min-width: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: calc(18px * var(--layout-scale));
+    }
+
+    .panel > div {
+      min-height: 0;
     }
 
     .glass {
@@ -156,7 +176,7 @@
       width: 100%;
       height: 1px;
       background: linear-gradient(90deg, rgba(255, 248, 231, 0.28), rgba(255, 248, 231, 0.04));
-      margin-top: 28px;
+      margin-top: calc(26px * var(--layout-scale));
       overflow: hidden;
     }
 
@@ -165,20 +185,20 @@
     }
 
     .greeting-block {
-      padding-top: 6px;
+      padding-top: calc(6px * var(--layout-scale));
     }
 
     .greeting-line {
       margin: 0;
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: clamp(0.78rem, calc((0.7rem + 0.2vw + 0.16vh) * var(--layout-scale)), 0.96rem);
       font-weight: 400;
       letter-spacing: 0.01em;
     }
 
     .name-line {
       margin: 8px 0 0;
-      font-size: clamp(2.15rem, 4vw, 3rem);
+      font-size: clamp(1.86rem, calc((1.5rem + 1.55vw + 0.45vh) * var(--layout-scale)), 3rem);
       font-weight: 500;
       line-height: 1.02;
       letter-spacing: -0.035em;
@@ -197,8 +217,8 @@
     }
 
     .hero-weather {
-      margin-top: 24px;
-      padding: 28px 24px 22px;
+      margin-top: calc(22px * var(--layout-scale));
+      padding: calc(26px * var(--layout-scale)) calc(22px * var(--layout-scale)) calc(20px * var(--layout-scale));
       position: relative;
       overflow: hidden;
     }
@@ -222,12 +242,12 @@
     .temperature-row {
       display: flex;
       align-items: center;
-      gap: 22px;
-      min-height: 148px;
+      gap: calc(20px * var(--layout-scale));
+      min-height: clamp(96px, calc(16vh * var(--layout-scale)), 148px);
     }
 
     .temperature-value {
-      font-size: clamp(5.8rem, 8vw, 7.6rem);
+      font-size: clamp(4.05rem, calc((3.1rem + 2.8vw + 0.9vh) * var(--layout-scale)), 7.6rem);
       line-height: 0.92;
       font-weight: 300;
       letter-spacing: -0.085em;
@@ -237,8 +257,8 @@
     }
 
     .hero-icon {
-      width: 84px;
-      height: 84px;
+      width: clamp(58px, calc((48px + 1.6vw + 0.7vh) * var(--layout-scale)), 84px);
+      height: clamp(58px, calc((48px + 1.6vw + 0.7vh) * var(--layout-scale)), 84px);
       color: var(--accent);
       filter: none;
       transition: color 360ms ease, transform 360ms ease, filter 360ms ease;
@@ -250,15 +270,15 @@
     }
 
     .condition-label {
-      margin-top: 6px;
-      font-size: 1rem;
+      margin-top: calc(6px * var(--layout-scale));
+      font-size: clamp(0.86rem, calc((0.8rem + 0.16vw + 0.08vh) * var(--layout-scale)), 1rem);
       color: var(--muted);
       min-height: 1.3em;
     }
 
     .feels-like {
-      margin-top: 6px;
-      font-size: 1.05rem;
+      margin-top: calc(6px * var(--layout-scale));
+      font-size: clamp(0.9rem, calc((0.84rem + 0.2vw + 0.09vh) * var(--layout-scale)), 1.05rem);
       color: var(--text);
       font-weight: 400;
       text-shadow: 0 0 12px rgba(255, 244, 222, 0.05);
@@ -267,19 +287,19 @@
     .forecast-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 34px;
+      gap: calc(10px * var(--layout-scale));
+      margin-top: calc(28px * var(--layout-scale));
     }
 
     .forecast-card {
-      padding: 16px 12px 14px;
+      padding: calc(15px * var(--layout-scale)) calc(11px * var(--layout-scale)) calc(14px * var(--layout-scale));
       border-radius: 22px;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
       border: 1px solid rgba(255, 248, 231, 0.055);
-      min-height: 170px;
+      min-height: clamp(116px, calc(18.4vh * var(--layout-scale)), 170px);
       display: grid;
       align-content: start;
-      gap: 10px;
+      gap: calc(8px * var(--layout-scale));
       transition: transform 300ms ease, border-color 300ms ease, background 300ms ease;
     }
 
@@ -291,14 +311,14 @@
 
     .forecast-label {
       color: var(--muted);
-      font-size: 0.98rem;
+      font-size: clamp(0.84rem, calc((0.78rem + 0.16vw + 0.08vh) * var(--layout-scale)), 0.98rem);
       font-weight: 500;
       letter-spacing: 0.01em;
     }
 
     .forecast-icon {
-      width: 42px;
-      height: 42px;
+      width: clamp(32px, calc((28px + 0.65vw + 0.2vh) * var(--layout-scale)), 42px);
+      height: clamp(32px, calc((28px + 0.65vw + 0.2vh) * var(--layout-scale)), 42px);
       color: var(--accent);
     }
 
@@ -313,7 +333,7 @@
 
     .forecast-mm {
       color: var(--text);
-      font-size: 1rem;
+      font-size: clamp(0.86rem, calc((0.8rem + 0.16vw + 0.06vh) * var(--layout-scale)), 1rem);
       padding-left: 1px;
       text-shadow: 0 0 10px rgba(255, 244, 222, 0.05);
     }
@@ -328,17 +348,17 @@
     .meta-wrap {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 22px;
+      gap: calc(8px * var(--layout-scale));
+      margin-top: calc(18px * var(--layout-scale));
     }
 
     .meta-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: calc(10px * var(--layout-scale));
       flex-wrap: wrap;
       color: var(--muted);
-      font-size: 1rem;
+      font-size: clamp(0.84rem, calc((0.78rem + 0.18vw + 0.08vh) * var(--layout-scale)), 1rem);
     }
 
     .meta-divider {
@@ -357,7 +377,7 @@
 
     .source-label {
       color: var(--faint);
-      font-size: 0.88rem;
+      font-size: clamp(0.72rem, calc((0.7rem + 0.14vw + 0.04vh) * var(--layout-scale)), 0.88rem);
       line-height: 1.35;
       min-height: 1.35em;
     }
@@ -396,7 +416,7 @@
 
     .globe-stage {
       position: relative;
-      width: min(100%, 1118px);
+      width: min(100%, calc(var(--content-height) - 4px), 1188px);
       aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
@@ -414,7 +434,7 @@
     }
 
     .globe-stage::before {
-      inset: 1.6%;
+      inset: 0.45%;
       background:
         radial-gradient(circle at center, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.018) 54%, rgba(255, 255, 255, 0.008) 70%, transparent 84%);
       border: 1px solid rgba(255, 248, 231, 0.08);
@@ -458,7 +478,7 @@
     }
 
     .globe-orbit.orbit-a {
-      inset: 0.7%;
+      inset: 0.12%;
       background: conic-gradient(
         from 18deg,
         transparent 0 8%,
@@ -494,7 +514,7 @@
     }
 
     .globe-orbit.orbit-b {
-      inset: 2.2%;
+      inset: 1.25%;
       opacity: 0.54;
       background: conic-gradient(
         from 210deg,
@@ -519,7 +539,7 @@
     }
 
     .globe-pulse {
-      inset: 1.35%;
+      inset: 0.7%;
       z-index: 2;
       border: 1px solid rgba(255, 248, 231, 0.08);
       opacity: 0.26;
@@ -528,7 +548,7 @@
 
     .globe-frame {
       position: relative;
-      width: min(96.4%, 1078px);
+      width: min(98.1%, 1154px);
       aspect-ratio: 1 / 1;
       display: grid;
       place-items: center;
@@ -540,7 +560,7 @@
       border: 1px solid rgba(255, 248, 231, 0.1);
       box-shadow:
         0 0 0 1px rgba(255, 248, 231, 0.04),
-        0 0 0 10px rgba(255, 248, 231, 0.015),
+        0 0 0 12px rgba(255, 248, 231, 0.015),
         inset 0 0 0 1px rgba(255, 248, 231, 0.03),
         inset 0 -24px 60px rgba(0, 0, 0, 0.14);
       background:
@@ -564,15 +584,15 @@
 
     .globe-frame iframe {
       position: absolute;
-      inset: -18%;
-      width: 136%;
-      height: 136%;
+      inset: -12.5%;
+      width: 125%;
+      height: 125%;
       border: 0;
       z-index: 0;
       opacity: 0.01;
       pointer-events: none;
-      filter: saturate(0.86) contrast(1) brightness(0.85) sepia(0.015);
-      transform: scale(1.152);
+      filter: saturate(0.92) contrast(1.02) brightness(0.86) sepia(0.015);
+      transform: scale(1.038);
       transition: opacity 900ms ease;
     }
 
@@ -652,11 +672,11 @@
     }
 
     .clock-block {
-      padding-top: 18px;
+      padding-top: calc(16px * var(--layout-scale));
     }
 
     .clock-value {
-      font-size: clamp(3.25rem, 5vw, 4.25rem);
+      font-size: clamp(2.5rem, calc((2rem + 1.55vw + 0.46vh) * var(--layout-scale)), 4.25rem);
       line-height: 0.94;
       font-weight: 300;
       letter-spacing: -0.07em;
@@ -665,34 +685,34 @@
     }
 
     .date-value {
-      margin-top: 10px;
-      font-size: 1.02rem;
+      margin-top: calc(8px * var(--layout-scale));
+      font-size: clamp(0.86rem, calc((0.82rem + 0.14vw + 0.06vh) * var(--layout-scale)), 1.02rem);
       color: var(--muted);
     }
 
     .progress-stack,
     .daylight-section {
-      padding: 24px 22px;
+      padding: calc(22px * var(--layout-scale)) calc(20px * var(--layout-scale));
     }
 
     .progress-stack {
-      margin-top: 18px;
+      margin-top: calc(16px * var(--layout-scale));
       display: grid;
-      gap: 22px;
+      gap: calc(18px * var(--layout-scale));
     }
 
     .progress-item {
       display: grid;
-      gap: 10px;
+      gap: calc(8px * var(--layout-scale));
     }
 
     .progress-head {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 12px;
+      gap: calc(10px * var(--layout-scale));
       color: var(--muted);
-      font-size: 0.98rem;
+      font-size: clamp(0.84rem, calc((0.78rem + 0.16vw + 0.08vh) * var(--layout-scale)), 0.98rem);
     }
 
     .progress-value {
@@ -727,10 +747,10 @@
     }
 
     .daylight-section {
-      margin-top: 20px;
+      margin-top: calc(18px * var(--layout-scale));
       display: grid;
-      gap: 18px;
-      min-height: 420px;
+      gap: calc(14px * var(--layout-scale));
+      min-height: clamp(296px, calc(40vh * var(--layout-scale)), 420px);
     }
 
     .daylight-header {
@@ -739,12 +759,12 @@
     }
 
     .daylight-title {
-      font-size: 0.98rem;
+      font-size: clamp(0.84rem, calc((0.78rem + 0.16vw + 0.08vh) * var(--layout-scale)), 0.98rem);
       color: var(--muted);
     }
 
     .daylight-value {
-      font-size: 1.8rem;
+      font-size: clamp(1.38rem, calc((1.12rem + 0.5vw + 0.22vh) * var(--layout-scale)), 1.8rem);
       font-weight: 400;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.04em;
@@ -839,9 +859,10 @@
     .daylight-times {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: calc(10px * var(--layout-scale));
       color: var(--text);
       font-variant-numeric: tabular-nums;
+      font-size: clamp(0.8rem, calc((0.76rem + 0.14vw + 0.05vh) * var(--layout-scale)), 1rem);
       text-shadow: 0 0 10px rgba(255, 244, 222, 0.05);
     }
 
@@ -857,35 +878,35 @@
     .solar-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: calc(14px * var(--layout-scale));
     }
 
     .solar-card {
       display: grid;
-      gap: 6px;
-      padding: 10px 0 0;
+      gap: calc(5px * var(--layout-scale));
+      padding: calc(10px * var(--layout-scale)) 0 0;
     }
 
     .solar-head {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: calc(9px * var(--layout-scale));
       color: var(--muted);
     }
 
     .solar-icon {
-      width: 24px;
-      height: 24px;
+      width: clamp(18px, calc((16px + 0.3vw + 0.15vh) * var(--layout-scale)), 24px);
+      height: clamp(18px, calc((16px + 0.3vw + 0.15vh) * var(--layout-scale)), 24px);
       color: var(--muted);
       flex: none;
     }
 
     .solar-label {
-      font-size: 0.95rem;
+      font-size: clamp(0.8rem, calc((0.76rem + 0.14vw + 0.05vh) * var(--layout-scale)), 0.95rem);
     }
 
     .solar-value {
-      font-size: 1.95rem;
+      font-size: clamp(1.42rem, calc((1.16rem + 0.62vw + 0.22vh) * var(--layout-scale)), 1.95rem);
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.045em;
       line-height: 1;
@@ -992,195 +1013,102 @@
       }
     }
 
-    @media (max-width: 1260px) {
+    @media (max-width: 1480px) {
       .app-shell {
-        grid-template-columns: minmax(250px, 300px) minmax(380px, 1fr) minmax(250px, 300px);
-        gap: 20px;
-      }
-
-      .temperature-row {
-        min-height: 128px;
+        grid-template-columns: minmax(204px, 18vw) minmax(420px, 1.42fr) minmax(204px, 18vw);
       }
     }
 
-    @media (max-width: 1100px) and (orientation: landscape) {
-      .app-shell {
-        grid-template-columns: minmax(170px, 220px) minmax(260px, 1fr) minmax(170px, 220px);
-        gap: 14px;
-        padding: 14px 14px 18px;
+    @media (orientation: landscape) and (max-height: 980px) {
+      :root {
+        --layout-scale: 0.92;
+        --shell-vpad: 16px;
+        --shell-hpad: 18px;
+        --shell-gap: 18px;
       }
 
-      .panel,
-      .center-stage {
-        min-height: calc(100vh - 32px);
+      .app-shell {
+        grid-template-columns: minmax(194px, 17.6vw) minmax(360px, 1.5fr) minmax(194px, 17.6vw);
       }
 
       .globe-stage {
-        width: min(100%, calc(100vw - 420px), 66vh, 640px);
-        margin-inline: auto;
+        width: min(100%, calc(var(--content-height) - 4px), 1020px);
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 860px) {
+      :root {
+        --layout-scale: 0.82;
+        --shell-vpad: 12px;
+        --shell-hpad: 14px;
+        --shell-gap: 14px;
       }
 
-      .greeting-line {
-        font-size: 0.84rem;
+      .app-shell {
+        grid-template-columns: minmax(176px, 16.7vw) minmax(320px, 1.55fr) minmax(176px, 16.7vw);
       }
 
-      .name-line {
-        font-size: clamp(1.72rem, 3vw, 2.35rem);
+      .globe-stage {
+        width: min(100%, calc(var(--content-height) - 2px), 930px);
       }
 
-      .rule {
-        margin-top: 18px;
+      .daylight-section {
+        min-height: clamp(252px, 34vh, 330px);
       }
 
+      .progress-stack,
+      .daylight-section,
       .hero-weather {
-        margin-top: 16px;
-        padding: 18px 16px 16px;
-      }
-
-      .temperature-row {
-        min-height: 98px;
-        gap: 12px;
-      }
-
-      .temperature-value {
-        font-size: clamp(3.8rem, 5.5vw, 5.1rem);
-      }
-
-      .hero-icon {
-        width: 62px;
-        height: 62px;
-      }
-
-      .condition-label {
-        margin-top: 4px;
-        font-size: 0.9rem;
-      }
-
-      .feels-like {
-        margin-top: 4px;
-        font-size: 0.92rem;
-      }
-
-      .forecast-grid {
-        margin-top: 20px;
-        gap: 8px;
-      }
-
-      .forecast-card {
-        min-height: 136px;
-        padding: 12px 10px 12px;
-        border-radius: 18px;
-        gap: 8px;
-      }
-
-      .forecast-label,
-      .forecast-precip,
-      .forecast-mm {
-        font-size: 0.88rem;
-      }
-
-      .forecast-icon {
-        width: 34px;
-        height: 34px;
-      }
-
-      .meta-wrap {
-        margin-top: 16px;
-        gap: 8px;
-      }
-
-      .meta-row {
-        gap: 8px;
-        font-size: 0.88rem;
+        border-radius: 24px;
       }
 
       .meta-divider {
         height: 18px;
         margin: 0 2px;
       }
+    }
+
+    @media (orientation: landscape) and (max-height: 760px) {
+      :root {
+        --layout-scale: 0.74;
+        --shell-vpad: 10px;
+        --shell-hpad: 12px;
+        --shell-gap: 12px;
+      }
+
+      .app-shell {
+        grid-template-columns: minmax(160px, 16vw) minmax(290px, 1.6fr) minmax(160px, 16vw);
+      }
+
+      .globe-stage {
+        width: min(100%, var(--content-height), 860px);
+      }
+
+      .forecast-card {
+        border-radius: 16px;
+      }
+
+      .meta-row {
+        gap: 6px;
+      }
 
       .source-label {
-        font-size: 0.76rem;
+        font-size: 0.74rem;
         line-height: 1.25;
-      }
-
-      .clock-block {
-        padding-top: 10px;
-      }
-
-      .clock-value {
-        font-size: clamp(2.45rem, 4vw, 3.2rem);
-      }
-
-      .date-value {
-        margin-top: 6px;
-        font-size: 0.88rem;
-      }
-
-      .progress-stack,
-      .daylight-section,
-      .hero-weather {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .progress-stack {
-        margin-top: 14px;
-        padding-top: 16px;
-        padding-bottom: 14px;
-        gap: 14px;
-      }
-
-      .progress-head {
-        gap: 10px;
-        font-size: 0.88rem;
-      }
-
-      .daylight-section {
-        margin-top: 14px;
-        min-height: 0;
-        padding-top: 16px;
-        padding-bottom: 14px;
-        gap: 12px;
-      }
-
-      .daylight-title {
-        font-size: 0.88rem;
-      }
-
-      .daylight-value {
-        font-size: 1.45rem;
-      }
-
-      .daylight-times {
-        gap: 8px;
-        font-size: 0.82rem;
-      }
-
-      .solar-grid {
-        gap: 10px;
-      }
-
-      .solar-head {
-        gap: 8px;
-      }
-
-      .solar-icon {
-        width: 20px;
-        height: 20px;
-      }
-
-      .solar-label {
-        font-size: 0.82rem;
-      }
-
-      .solar-value {
-        font-size: 1.45rem;
       }
     }
 
     @media (max-width: 1100px) and (orientation: portrait), (max-width: 820px) {
+      :root {
+        --layout-scale: 1;
+        --shell-vpad: 24px;
+        --shell-hpad: 18px;
+        --shell-gap: 24px;
+      }
+
       .app-shell {
+        min-height: var(--app-height);
+        height: auto;
         grid-template-columns: 1fr;
         gap: 24px;
       }
@@ -1188,6 +1116,7 @@
       .center-stage {
         order: 1;
         min-height: auto;
+        height: auto;
       }
 
       .panel-left {
@@ -1200,6 +1129,7 @@
 
       .panel {
         min-height: auto;
+        height: auto;
       }
 
       .globe-stage {
@@ -1208,8 +1138,13 @@
     }
 
     @media (max-width: 720px) {
+      :root {
+        --shell-vpad: 18px;
+        --shell-hpad: 16px;
+      }
+
       .app-shell {
-        padding: 18px 16px 28px;
+        padding: var(--shell-vpad) var(--shell-hpad) 28px;
       }
 
       .hero-weather,
@@ -1300,7 +1235,7 @@
             <div>
               <h2>Live globe unavailable</h2>
               <p>The embedded earth view did not load here. You can still open the exact live globe directly.</p>
-              <a href="https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,316" target="_blank" rel="noreferrer noopener">Open live globe</a>
+              <a href="https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,376" target="_blank" rel="noreferrer noopener">Open live globe</a>
             </div>
           </div>
         </div>
@@ -1410,8 +1345,8 @@
       weatherFallbackRetryMs: 5 * 60 * 1000,
       clockIntervalMs: 1000,
       slowUiIntervalMs: 60 * 1000,
-      globeUrl: "https://earth.nullschool.net/?float#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,316",
-      globeExternalUrl: "https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,316"
+      globeUrl: "https://earth.nullschool.net/?float#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,376",
+      globeExternalUrl: "https://earth.nullschool.net/#current/wind/isobaric/700hPa/overlay=uv_index/orthographic=15.34,32.50,376"
     };
 
     const state = {
